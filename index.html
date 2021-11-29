@@ -10,6 +10,14 @@
   <title>Elinous Docs</title>
 </head>
 <body>
+  <style>
+  .etiqueta{
+    padding: 5px 10px;
+    border-radius: 15px;
+    background: #42b983;
+    color:#fff;
+  }
+  </style>
   <div id="app">Por favor espere...</div>
   <script>
     window.$docsify = {
@@ -18,6 +26,9 @@
         loadSidebar: true,
         search: 'auto',
         themeColor: "#42b983",
+        executeScript: true,
+        name:'Elinous',
+        logo: './images/logo-elinous.png',
         formatUpdated: '{DD}-{MM}-{YYYY}',
         // complete configuration parameters
         search: {

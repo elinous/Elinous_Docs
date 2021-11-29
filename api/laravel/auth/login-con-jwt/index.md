@@ -3,109 +3,115 @@ Documentacion modificada el: {docsify-updated}
 ---
 
 # Login con JWT
- 
+
+Se utilizó en:
+<span class="etiqueta">Cuotas sociales</span>
+<span class="etiqueta">Appunto</span>
+<span class="etiqueta">Kinetic</span>
+<span class="etiqueta">Tobifix</span>
+
 En esta documentación se detalla a un nivel simple las funciones del login y sus requerimientos.
- 
+
 ---
- 
+
 Para poder realizar este proceso se necesitará.
- 
+
 * Laravel (De preferencia versiones iguales o superiores a la 5.4, aunque se pueden utilizar versiones anteriores).
- 
+
 * Composer.
- 
+
 * Visual Studio Code
- 
+
 * Saber utilizar la consola de comandos en Visual Studio Code
- 
+
 ---
- 
+
 ## Instalación del Auth por Composer
- 
+
 ---
- 
+
 ### Primer paso
- 
+
 Para poder instalar la última versión del auto de JWT se debe ejecutar el siguiente código.
- 
+
     composer require tymon/jwt-auth
- 
+
 ---
- 
+
 ### Añadir proveedor de servicio
- 
+
 Una vez se ha realizado el paso anterior se deberá agregar un proveedor de servicios al array "providers" que se encuentra dentro de la ruta "config/app.php".
- 
+
     'providers' => [
- 
+
         ...
- 
+
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ]
- 
+
 Cabe destacar que este proceso solo se debe realizar en proyectos que utilicen Laravel 5.4 o inferior.
- 
+
 ---
- 
+
 ### Publicar la configuración
- 
+
 Una vez completados los pasos anteriores se debe publicar el paquete de configuración, para poder hacer esto se deberá utilizar el siguiente comando.
- 
+
     php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
- 
+
 Esto creará la ruta "config/jwt.php" que servirá para configurar los aspectos básicos del paquete.
- 
+
 ---
- 
+
 ### Generar clave secreta
- 
+
 Se incluye un comando auxiliar que tiene la utilidad de crear una clave secreta para el usuario
- 
+
     php artisan jwt:secret
- 
+
 Esto actualizará el archivo ".env" añadiendo la línea "JWT_SECRET=foobar"
- 
+
 Es la clave que se utilizará para firmar los tokens. La forma en que eso suceda exactamente dependerá del algoritmo que elija utilizar.
 
 
 ---
 
 ## Guía de Inicio Rápido
- 
+
 ---
- 
+
 ### Actualizar el modelo de usuario
- 
+
 Primero, se deberá implementar el contrato
- 
+
     Tymon\JWTAuth\Contracts\JWTSubject
- 
+
 dentro del modelo de usuario. Una vez que se implementó el contrato se deberán implementar los métodos
- 
+
     getJWTIdentifier()
- 
+
 y
- 
+
     getJWTCustomClaims()
- 
+
 Todo esto dentro del modelo de usuario igualmente.
- 
+
 Abajo se mostrará un ejemplo de cómo se debería ver, obviamente, se deberá actualizar para que se acomode a el uso necesario
- 
+
     <?php
- 
+
     namespace App;
- 
+
     use Tymon\JWTAuth\Contracts\JWTSubject;
     use Illuminate\Notifications\Notifiable;
     use Illuminate\Foundation\Auth\User as Authenticatable;
- 
+
     class User extends Authenticatable implements JWTSubject
     {
         use Notifiable;
- 
+
         // Rest omitted for brevity
- 
+
         /**
         * Get the identifier that will be stored in the subject claim of the JWT.
         *
@@ -115,7 +121,7 @@ Abajo se mostrará un ejemplo de cómo se debería ver, obviamente, se deberá a
         {
             return $this->getKey();
         }
- 
+
         /**
         * Return a key value array, containing any custom claims to be added to the JWT.
         *
@@ -126,70 +132,70 @@ Abajo se mostrará un ejemplo de cómo se debería ver, obviamente, se deberá a
             return [];
         }
     }
- 
+
 ---
- 
+
 ### Configurar Auth guard
- 
+
 Nota: Esto solo funcionara en las versiones de Laravel 5.2 hacia arriba
- 
+
 Dentro de la ruta "config/auth.php" se deben hacer unos cuantos cambios para permitir a Laravel utilizar el Auth guard.
- 
+
 Dichos cambios son:
- 
+
     'defaults' => [
         'guard' => 'api',
         'passwords' => 'users',
     ],
- 
+
     ...
- 
+
     'guards' => [
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
     ],
- 
+
 Con esto se le informará al guard de la API que debe utilizar el driver de JWT, también se está definiendo el guard de la API como un default dentro de la configuración.
- 
+
 ---
- 
+
 ### Añadir rutas de autenticación básicas
- 
+
 Se agregaran algunas rutas de autenticación básicas dentro de "routes/api.php"
- 
+
     Route::group([
- 
+
         'middleware' => 'api',
         'prefix' => 'auth'
- 
+
     ], function ($router) {
- 
+
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
         Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
- 
+
     });
- 
+
 ---
- 
+
 ### Crear el AuthController
- 
+
 Esto se puede hacer de 2 formas, manualmente o utilizando el comando:
- 
+
     php artisan make:controller AuthController
- 
+
 Una vez creado el AuthController se deberá agregar lo siguiente:
- 
+
     <?php
- 
+
     namespace App\Http\Controllers;
- 
+
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
- 
+
     class AuthController extends Controller
     {
         /**
@@ -201,7 +207,7 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
         {
             $this->middleware('auth:api', ['except' => ['login']]);
         }
- 
+
         /**
         * Get a JWT via given credentials.
         *
@@ -210,14 +216,14 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
         public function login()
         {
             $credentials = request(['email', 'password']);
- 
+
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
- 
+
             return $this->respondWithToken($token);
         }
- 
+
         /**
         * Get the authenticated User.
         *
@@ -227,7 +233,7 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
         {
             return response()->json(auth()->user());
         }
- 
+
         /**
         * Log the user out (Invalidate the token).
         *
@@ -236,10 +242,10 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
         public function logout()
         {
             auth()->logout();
- 
+
             return response()->json(['message' => 'Successfully logged out']);
         }
- 
+
         /**
         * Refresh a token.
         *
@@ -249,7 +255,7 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
         {
             return $this->respondWithToken(auth()->refresh());
         }
- 
+
         /**
         * Get the token array structure.
         *
@@ -266,9 +272,9 @@ Una vez creado el AuthController se deberá agregar lo siguiente:
             ]);
         }
     }
- 
+
 Una vez hecho lo anterior, se podrá probar el login con credenciales válidas, lo cual deberá mostrar un resultado parecido a:
- 
+
     {
         "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
         "token_type": "bearer",
@@ -278,17 +284,17 @@ Una vez hecho lo anterior, se podrá probar el login con credenciales válidas, 
 ---
 
 ## Funciones agregadas por parte de Elinous
- 
+
 Como empresa, Elinous hizo ciertas modificaciones realmente útiles (como puede ser la creación automática de una contraseña que después se debe cambiar)
- 
+
 En esta sección se mostrarán todas las modificaciones hechas por Elinous.
- 
+
 ---
- 
+
 ### Contraseña Temporal
- 
+
 Con el siguiente código se creará una contraseña temporal, la cual se le enviará al usuario mediante correo electrónico, la contraseña se deberá modificar para el posterior uso de la cuenta
- 
+
     //generar código único
     public function generarCodigoUnico()
     {
@@ -300,13 +306,13 @@ Con el siguiente código se creará una contraseña temporal, la cual se le envi
         }
         return $string;
     }
- 
+
 ---
- 
+
 ### Aviso de Credenciales Inválidas
- 
+
 Aqui se mostrara un código de error junto con un mensaje en caso de que un usuario sin registrar intente iniciar sesión
- 
+
     public function loginfromUser($user, $login = false)
     {
         if (!$token = auth()->login($user)) {
@@ -314,15 +320,15 @@ Aqui se mostrara un código de error junto con un mensaje en caso de que un usua
         }
         return $this->respondWithToken($token, $login);
     }
- 
+
 ---
- 
+
 ### Registrar Usuario
- 
+
 La siguiente función se podría clasificar como la más importante, ya que tiene el trabajo de crear al nuevo usuario cuando alguien se registra, llamando a funciones como la creación de contraseña temporal entre otras, igualmente enviar un correo de bienvenida al nuevo usuario.
- 
+
 Nota: El siguiente código fué utilizado en el proyecto "Appunto" pudiéndose modificar para el uso que se desee
- 
+
     public function register()
     {
         DB::beginTransaction(); // activar transacciones
@@ -354,13 +360,13 @@ Nota: El siguiente código fué utilizado en el proyecto "Appunto" pudiéndose m
         ], 400);
         }
     }
- 
+
 ---
- 
+
 ### Responder con Token
- 
+
 La siguiente función le entregará un token de acceso al usuario ya registrado, dicho token está vinculado al usuario que acaba de iniciar sesión
- 
+
     protected function respondWithToken($token)
     {
         $usuario = auth()->user();
