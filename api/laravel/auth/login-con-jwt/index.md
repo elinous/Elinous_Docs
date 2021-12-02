@@ -10,6 +10,8 @@ Se utilizó en:
 <span class="etiqueta">Kinetic</span>
 <span class="etiqueta">Tobifix</span>
 
+---
+
 En esta documentación se detalla a un nivel simple las funciones del login y sus requerimientos.
 
 ---
@@ -23,6 +25,9 @@ Para poder realizar este proceso se necesitará.
 * Visual Studio Code
 
 * Saber utilizar la consola de comandos en Visual Studio Code
+
+Nota: Se adjunta un link a la documentación oficial de JWT:
+https://jwt-auth.readthedocs.io/en/develop/laravel-installation/
 
 ---
 

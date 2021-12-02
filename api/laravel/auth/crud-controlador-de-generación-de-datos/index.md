@@ -4,6 +4,14 @@ Documentacion modificada el: {docsify-updated}
 
 # Controlador de generación de datos
 
+Se utilizó en:
+<span class="etiqueta">Cuotas sociales</span>
+<span class="etiqueta">Appunto</span>
+<span class="etiqueta">Kinetic</span>
+<span class="etiqueta">Tobifix</span>
+
+---
+
 En esta documentación se detallará a un nivel simple las funciones del controlador y sus requerimientos.
 
 ---

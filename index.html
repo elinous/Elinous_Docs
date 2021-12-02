@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,47 +10,45 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css" />
   <title>Elinous Docs</title>
 </head>
+
 <body>
   <style>
-  .etiqueta{
-    padding: 5px 10px;
-    border-radius: 15px;
-    background: #42b983;
-    color:#fff;
-  }
+    .etiqueta {
+      padding: 5px 10px;
+      border-radius: 15px;
+      background: #42b983;
+      color: #fff;
+    }
   </style>
   <div id="app">Por favor espere...</div>
   <script>
     window.$docsify = {
-        auto2top: true,
-        el: '#app',
-        loadSidebar: true,
-        search: 'auto',
-        themeColor: "#42b983",
-        executeScript: true,
-        name:'Elinous',
-        logo: './images/logo-elinous.png',
-        formatUpdated: '{DD}-{MM}-{YYYY}',
-        // complete configuration parameters
-        search: {
-          maxAge: 86400000, // Expiration time, the default one day
-          paths: [], // or 'auto'
-          placeholder: 'Buscar',
-        },
-        scrollToTop: {
+      auto2top: true,
+      el: '#app',
+      loadSidebar: true,
+      search: 'auto',
+      themeColor: "#42b983",
+      executeScript: true,
+      name: 'Elinous',
+      logo: './images/logo-elinous.png',
+      formatUpdated: '{DD}-{MM}-{YYYY}',
+      // complete configuration parameters
+      search: {
+        maxAge: 86400000, // Expiration time, the default one day
+        paths: [], // or 'auto'
+        placeholder: 'Buscar',
+      },
+      scrollToTop: {
         auto: true,
         text: 'Subir',
         right: 20,
         bottom: 20,
         offset: 100
-    }
-      }
+      },
+    };
   </script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/style.min.css" />
-  <!-- <link
-  rel="stylesheet"
-  href="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/style.min.css"
-/> -->
+
   <script src="//cdn.jsdelivr.net/npm/docsify@5"></script>
   <script src="https://unpkg.com/docsify-copy-code@2"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
@@ -57,4 +56,5 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/index.min.js"></script>
   <script src="//unpkg.com/docsify-scroll-to-top/dist/docsify-scroll-to-top.min.js"></script>
 </body>
+
 </html>
