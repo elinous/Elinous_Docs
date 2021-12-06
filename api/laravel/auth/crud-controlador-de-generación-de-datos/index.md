@@ -28,11 +28,39 @@ Para poder utilizar este generador se requerirá:
 
 * Engine INNODB.
 
-Nota: "Los archivos generados aparecerán en la ruta: storage/app/generated_data"
 
 ---
 
-## Primer paso
+## Primer Paso
+
+Los siguientes requisitos son técnicos y se deben agregar para el funcionamiento del generador
+ 
+Como primera modificación, en el archivo que se encuentra en la dirección:
+ 
+    app\Providers\RouteServiceProvider.php
+ 
+se debe buscar y descomentar la línea:
+ 
+    protected $namespace = 'App\\Http\\Controllers';
+
+Luego de haber descomentado la línea anterior se debe crear una ruta dentro de la dirección:
+ 
+    routes/web.php
+ 
+Dentro de dicho archivo se debe agregar la ruta:
+ 
+    Route::get('generador', 'DataGeneratorController@generate_models']);
+
+Cuando los pasos anteriores se hayan completado se deberá crear un nuevo archivo dentro de la dirección donde se almacenan los controladores, a dicho archivo se le deberá asignar el nombre de "generador" y en él se deberán agregar todos los métodos que se mostraran en esta documentación.
+ 
+Los métodos se deben agregar en el mismo orden que se muestra.
+
+Nota: "Los archivos generados aparecerán en la ruta: storage/app/generated_data"
+
+
+---
+
+## Especificar Base de Datos
 
 Una vez que se tengan los requerimientos anteriores se deberá utilizar el siguiente código como un inicio para el controlador
  
